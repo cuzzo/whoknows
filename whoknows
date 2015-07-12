@@ -1,0 +1,41 @@
+#! /usr/bin/env bash
+
+GWK_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# Get Options.
+while getopts "a" opt; do
+	case $opt in
+		a)
+			all="1";;
+		\?)
+			echo "Invalid option: -$OPTARG" >&2;;
+	esac
+done
+shift "$((OPTIND - 1))"
+
+# Get arguments.
+search=$1
+loc=${2:-"."}
+
+authors=$(git log --format='%aN' | sort -u | $GWK_DIR/authors.py)
+if [ -n "$all" ] ; then
+	blamed_text=$(ag -ril "$search" $loc | xargs -n1 -d'\n' -i git blame {})
+else
+	blamed_text=$(ag -ril "$search" $loc | xargs -n1 -d'\n' -i git blame {} | grep -i "$search")
+fi
+
+totals=''
+IFS=$'\n'
+for author in $authors; do
+	count=$(grep -o $author <<< $blamed_text | wc -l)
+	if [ "$count" -eq 0 ] ; then
+		continue
+	fi
+	if [ -n "$totals" ] ; then
+		totals="$totals;$author/$count"
+	else
+		totals="$author/$count"
+	fi
+done
+
+echo $totals | tr ";" "\n" | sort -r -t/ -k2 -g | sed "s/\//: /"
