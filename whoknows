@@ -2,6 +2,14 @@
 
 GWK_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+# Get search command.
+which ag
+if (( $? > 0 )); then
+	search_cmd=grep
+else
+	search_cmd=ag
+fi
+
 # Get Options.
 while getopts "a" opt; do
 	case $opt in
@@ -19,9 +27,9 @@ loc=${2:-"."}
 
 authors=$(git log --format='%aN' | sort -u | $GWK_DIR/authors.py)
 if [ -n "$all" ] ; then
-	blamed_text=$(ag -ril "$search" $loc | xargs -n1 -d'\n' -i git blame {})
+	blamed_text=$($search_cmd -ril "$search" $loc | xargs -n1 -d'\n' -i git blame {})
 else
-	blamed_text=$(ag -ril "$search" $loc | xargs -n1 -d'\n' -i git blame {} | grep -i "$search")
+	blamed_text=$($search_cmd -ril "$search" $loc | xargs -n1 -d'\n' -i git blame {} | grep -i "$search")
 fi
 
 totals=''
