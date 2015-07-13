@@ -4,7 +4,7 @@ Seek and you shall find.
 
 ## Usage
 
-Search through a repository and find out who's modified code containing a keyword/phrase (hereby referred to as `keyphrase`).
+Search through a repository and find out who has modified code containing a keyword/phrase (hereby referred to as `keyphrase`). `whoknows` detects contributions made by pairs or groups and attributes each matching line to each contributor in the pair or group.
 
 ## Dependencies
 
