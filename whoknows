@@ -3,7 +3,7 @@
 GWK_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # Get search command.
-which ag
+which ag &> /dev/null
 if (( $? > 0 )); then
 	search_cmd=grep
 else
