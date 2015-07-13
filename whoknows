@@ -27,9 +27,9 @@ loc=${2:-"."}
 
 authors=$(git log --format='%aN' | sort -u | $GWK_DIR/authors.py)
 if [ -n "$all" ] ; then
-	blamed_text=$($search_cmd -ril "$search" $loc | tr "\n" "\0" | xargs -n1 -0 git blame)
+	blamed_text=$($search_cmd -ril "$search" $loc | tr "\n" "\0" | xargs -n1 -0 git blame 2> /dev/null)
 else
-	blamed_text=$($search_cmd -ril "$search" $loc | tr "\n" "\0" | xargs -n1 -0 git blame | grep -i "$search")
+	blamed_text=$($search_cmd -ril "$search" $loc | tr "\n" "\0" | xargs -n1 -0 git blame 2> /dev/null | grep -i "$search")
 fi
 
 totals=''
