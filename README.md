@@ -43,6 +43,8 @@ $ whoknows lemma in/some/subdir
 > Suzy: 1
 ```
 
+whoknows uses git-blame internally, so you should probably run it from the root or some subdirectory of your repository.
+
 ## Options
 
 `-a` search through all files containing the keyphrase, and report any line in that file--whether it contains the keyphrase or not.
